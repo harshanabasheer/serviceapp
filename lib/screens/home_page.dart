@@ -1,0 +1,422 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:serviceapp/controller/home_controller.dart';
+import 'package:serviceapp/utils/constants/api_constants.dart';
+import 'package:serviceapp/widget/text_button.dart';
+import '../routes/rout_name.dart';
+import '../utils/constants/app_color.dart';
+import '../utils/constants/text_styles.dart';
+
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    Provider.of<HomeController>(context,listen: false).getAllCategoriesController();
+    super.initState();
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+
+    final controller = context.watch<HomeController>();
+
+
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor: Colors.white,
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/images/profie.jpeg'),
+                  ),
+                   SizedBox(width: 20.w),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Jacob Jones",
+                          maxLines: 1,
+                          style: AppStyle.bodyBook.copyWith(color: AppColor.black),
+                        ),
+                        Text(
+                          "jacobjones@gmail.com",
+                          maxLines: 1,
+                          style: AppStyle.bodyBook.copyWith(color: AppColor.grey40),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 30.h),
+              buildGestureDetector(Icon(Icons.calendar_today), "Calender"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.payment), "Payment Methods"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.location_on), "Address"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.notifications_none), "Notifications"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.local_offer_sharp), "Offers"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.supervisor_account_rounded), "Refer a Friends"),
+               SizedBox(height: 20.h),
+              buildGestureDetector(Icon(Icons.phone), "Support"),
+            ],
+          ),
+        ),
+      ),
+
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Container(
+                  width: 414.w,
+                  height: 236.h,
+                  decoration: const ShapeDecoration(
+                    color: AppColor.darkYellow,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(30),
+                        bottomRight: Radius.circular(30),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(30),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.notes),
+                        onPressed: () {
+                          _scaffoldKey.currentState?.openDrawer();
+                        },
+                      ),
+
+                       SizedBox(width: 100.w),
+                      Expanded(
+                        child: Center(
+                          child: Row(
+                            children: [
+                              const Icon(Icons.location_on),
+                              Text(
+                                "Calicut",
+                                style: AppStyle.body2book
+                                    .copyWith(color: AppColor.black),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                       SizedBox(width: 100.w),
+                      const Icon(Icons.notifications),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 80,
+                  right: 20,
+                  child: Container(
+                    width: 374.w,
+                    height: 44.h,
+                    decoration: ShapeDecoration(
+                      color: AppColor.grey10,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child:  Row(
+                      children: [
+                        SizedBox(width: 16.w),
+                        Icon(Icons.search),
+                        SizedBox(width: 8.w),
+                        Expanded(
+                          child: TextField(
+                            decoration: InputDecoration(
+                              hintText: 'Search',
+                              border: InputBorder.none,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  top: 150,
+                  right: 30,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(15),
+                    child: Image.asset(
+                      'assets/images/offer.png',
+                      width: 350.w,
+                      height: 150.h,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 100.h,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Select Service",
+                    style: AppStyle.headline.copyWith(color: AppColor.black)),
+                SizedBox(
+                  width: 120.w,
+                ),
+                CustomTextButton(
+                  text: "See All",
+                  textStyle:
+                      AppStyle.body2book.copyWith(color: AppColor.grey40),
+                  functions: () {
+                    Navigator.pushNamed(context, RoutName.selectService);
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 95.h,
+                child:
+                controller.loading?
+                const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.darkYellow,
+                  ),
+                ):
+                ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.categories?.data?.length,
+                  itemBuilder: (context, index) {
+                    return
+                      Card(
+                      color: AppColor.background,
+                      child: Container(
+                        width: 79.w,
+                        height: 85.h,
+                        child: Column(
+                          children: [
+                            Image.network(
+                             "${Apiconstants.baseurl}${controller.categories?.data![index].categoryImage}",
+                              width: 40.w,
+                              height: 40.h,
+                              fit: BoxFit.cover,
+                            ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Text(
+                              controller.categories?.data?[index].categoryName ?? 'No Category',
+                              style: AppStyle.body2book.copyWith(color: AppColor.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Cleaning Service",
+                    style: AppStyle.headline.copyWith(color: AppColor.black)),
+                SizedBox(
+                  width: 120.w,
+                ),
+                CustomTextButton(
+                  text: "See All",
+                  textStyle:
+                      AppStyle.body2book.copyWith(color: AppColor.grey40),
+                  functions: () {
+                    Navigator.pushNamed(context, RoutName.forgotPasswordPage);
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 110.h,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: AppColor.background,
+                      child: Container(
+                        width: 340.w,
+                        height: 110.h,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: Image.asset(
+                                'assets/images/cleaning.png',
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            SizedBox(width: 20.h),
+                            Expanded(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Home Cleaning Service',
+                                    style: AppStyle.subHeadline
+                                        .copyWith(color: AppColor.black),
+                                  ),
+                                  Text(
+                                    '\$15.00',
+                                    style: AppStyle.body2book
+                                        .copyWith(color: AppColor.black),
+                                  ),
+                                  Row(
+                                    children: [
+                                      const Icon(
+                                        Icons.star,
+                                        color: Color(0xFFFFC107),
+                                      ),
+                                      Text(
+                                        '4.5',
+                                        style: AppStyle.body2book
+                                            .copyWith(color: AppColor.black),
+                                      ),
+                                      SizedBox(
+                                        width: 100.w,
+                                      ),
+                                      Text(
+                                        'Off 10%',
+                                        style: AppStyle.body2book
+                                            .copyWith(color: AppColor.grey40),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Text("Recommended",
+                    style: AppStyle.headline.copyWith(color: AppColor.black)),
+                SizedBox(
+                  width: 120.w,
+                ),
+                CustomTextButton(
+                  text: "See All",
+                  textStyle:
+                      AppStyle.body2book.copyWith(color: AppColor.grey40),
+                  functions: () {
+                    Navigator.pushNamed(context, RoutName.forgotPasswordPage);
+                  },
+                ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                height: 200.h,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 10,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      color: AppColor.background,
+                      child: Container(
+                        width: 142.w,
+                        height: 181.h,
+                        child: Column(
+                          children: [
+                            Image.asset(
+                              'assets/images/acrepair.png',
+                              width: 142.w,
+                              height: 126.h,
+                              fit: BoxFit.cover,
+                            ),
+                            Text(
+                              'AC Repair Service',
+                              style: AppStyle.subHeadline
+                                  .copyWith(color: AppColor.black),
+                            ),
+                            Text(
+                              '\$30.00',
+                              style: AppStyle.body2book
+                                  .copyWith(color: AppColor.black),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+
+    );
+  }
+
+  GestureDetector buildGestureDetector(Icon icon,String text) {
+    return GestureDetector(
+              onTap: () {
+              },
+              child: Row(
+                children: [
+                  icon,
+                   SizedBox(width: 10.h),
+                  Text(
+                    text,
+                    style: AppStyle.bodyBook.copyWith(color: AppColor.black),
+                  ),
+                ],
+              ),
+            );
+  }
+}
