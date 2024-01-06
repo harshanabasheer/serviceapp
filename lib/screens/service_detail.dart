@@ -104,7 +104,7 @@ class _ServiceDetailState extends State<ServiceDetail> {
                         style: AppStyle.subHeadline.copyWith(color: AppColor.black),
                       ),
                       Text(
-                        controller.services?[index].price ?? 'No Price',
+                        '\$ ${controller.services?[index].price ?? 'No Price'}',
                         style: AppStyle.body2book.copyWith(color: AppColor.black),
                       ),
                     ],

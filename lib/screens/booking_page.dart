@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:read_more_text/read_more_text.dart';
 import 'package:serviceapp/widget/container.dart';
+import '../controller/booking_controller.dart';
 import '../controller/home_controller.dart';
 import '../routes/rout_name.dart';
 import '../utils/constants/api_constants.dart';
@@ -18,37 +20,7 @@ class BookingPage extends StatefulWidget {
 }
 
 class _BookingPageState extends State<BookingPage> {
-  DateTime? _selectedDate;
 
-  TimeOfDay? _selectedTime;
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1),
-    );
-    if (pickedDate != null && pickedDate != _selectedDate) {
-        _selectedDate = pickedDate;
-
-
-    }
-  }
-
-  Future<TimeOfDay?> _selectTime(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-    if (pickedTime != null && pickedTime != _selectedTime) {
-
-
-
-        return pickedTime;
-
-    }
-  }
 
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -74,7 +46,7 @@ class _BookingPageState extends State<BookingPage> {
             children: [
               Container(
                 width: 414.w,
-                height: 315.h,
+                height: 450.h,
                 decoration: BoxDecoration(
                   image: DecorationImage(
                     image:  NetworkImage(
@@ -90,7 +62,7 @@ class _BookingPageState extends State<BookingPage> {
                 ),
               ),
               Positioned(
-                top: 220,
+                top: 300,
                 right: 15,
                 child: Card(
                   elevation: 4,
@@ -113,16 +85,16 @@ class _BookingPageState extends State<BookingPage> {
                         Row(
                           children: [
                             Text(
-                                controller.oneService?.price ?? 'No Service',
+                                '\$ ${controller.oneService?.price ?? 'No Price'}',
                                 style: AppStyle.bodyBook.copyWith(color: AppColor.black)
                             ),
-                            SizedBox(width: 230.w,),
+                            SizedBox(width: 250.w,),
                             const Icon(
                               Icons.star,
                               color: Color(0xFFFFC107),
                             ),
                             Text(
-                              '4.5',
+                                controller.oneService?.rating ?? 'No Rating',
                               style: AppStyle.body2book
                                   .copyWith(color: AppColor.black),
                             ),
@@ -135,100 +107,127 @@ class _BookingPageState extends State<BookingPage> {
               ),
             ],
           ),
-          SizedBox(height: 100.h),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: 20.w),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Type Of Property", style: AppStyle.headline.copyWith(color: AppColor.black),),
-                SizedBox(height: 10.h,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomContainer(text: "Home", icon: Icon(Icons.home)),
-                    CustomContainer(text: "Office", icon: Icon(Icons.home_work_outlined)),
-                    CustomContainer(text: "Villa", icon: Icon(Icons.home_filled)),
+          SizedBox(height: 40.h),
+          
+          Expanded(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                  ],
-                ),
-                SizedBox(height: 30.h,),
-                Text("Description", style: AppStyle.headline.copyWith(color: AppColor.black),),
-                Text("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.", style: AppStyle.body2book.copyWith(color: AppColor.black),),
-                SizedBox(height: 30.h,),
-                Row(
-                  children: [
-                    Text("Total:", style: AppStyle.bodyBook.copyWith(color: AppColor.grey40),),
-                    Text("30.00", style: AppStyle.title3.copyWith(color: AppColor.black),),
-                  ],
-                ),
-                SizedBox(height: 80.h,),
-                CustomButton(text:"Book Now",textStyle: AppStyle.caption1.copyWith(color: AppColor.black) ,functions:(){
-                  Navigator.pushNamed(context, RoutName.checkoutPage);
-                  // showDialog(
-                  //   context: context,
-                  //   builder: (BuildContext context) {
-                  //     return AlertDialog(
-                  //       backgroundColor: AppColor.baseText,
-                  //       content: Column(
-                  //         mainAxisSize: MainAxisSize.min,
-                  //         children: [
-                  //           GestureDetector(
-                  //             onTap: () => _selectDate(context),
-                  //             child: Container(
-                  //               width: 374.w,
-                  //               height: 56.h,
-                  //               decoration: ShapeDecoration(
-                  //                 color: AppColor.grey10,
-                  //                 shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(16),
-                  //                 ),
-                  //               ),
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   _selectedDate != null
-                  //                       ? _selectedDate!.toString().split(' ')[0]
-                  //                       : "Select Date",
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           SizedBox(height: 20.h),
-                  //           GestureDetector(
-                  //             onTap: () async{
-                  //               _selectedTime = await _selectTime(context);
-                  //               setState(() {
-                  //
-                  //               });
-                  //
-                  //               },
-                  //             child: Container(
-                  //               width: 374,
-                  //               height: 56,
-                  //               decoration: ShapeDecoration(
-                  //                 color:AppColor.grey10,
-                  //                 shape: RoundedRectangleBorder(
-                  //                   borderRadius: BorderRadius.circular(16),
-                  //                 ),
-                  //               ),
-                  //               child: Center(
-                  //                 child: Text(
-                  //                   _selectedTime != null
-                  //                       ? _selectedTime!.format(context)
-                  //                       : "Select Time",
-                  //                 ),
-                  //               ),
-                  //             ),
-                  //           ),
-                  //
-                  //         ],
-                  //       ),
-                  //     );
-                  //   },
-                  // );
-                } ,),
-              ],
+                  SizedBox(height: 30.h,),
+                  Text("Description", style: AppStyle.headline.copyWith(color: AppColor.black),
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: ReadMoreText(controller.oneService?.description ?? 'No Description', style: AppStyle.body2book.copyWith(color: AppColor.black),
+                        numLines: 5,
+                        readMoreText: 'Read More',
+                        readLessText: 'Read Less',
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Text("Total:", style: AppStyle.bodyBook.copyWith(color: AppColor.grey40),),
+                      Text(
+                        '\$ ${controller.oneService?.price ?? 'No Price'}',
+                        style: AppStyle.title3.copyWith(color: AppColor.black),),
+                    ],
+                  ),
+                  SizedBox(height: 20.h,),
+                  CustomButton(
+                    text: "Book Now",
+                    textStyle: AppStyle.caption1.copyWith(color: AppColor.black),
+                    functions: () {
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return  Consumer<BookingController>(
+                              builder: (context, provider, _) {
+                                return SizedBox(
+                                  width: double.maxFinite,
+                                  child: Column(
+                                     mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await provider.selectDate(context);
+
+                                        },
+                                        child:Container(
+                                          width: 374.w,
+                                          height: 56.h,
+                                          decoration: ShapeDecoration(
+                                            color: AppColor.grey10,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              provider.selectedDate != null
+                                                  ? provider.selectedDate.toString().split(' ')[0]
+                                                  : "Select Date",
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(height: 20.h),
+                                      GestureDetector(
+                                        onTap: () async {
+                                          await provider.selectTime(context);
+
+                                        },
+                                        child:Container(
+                                          width: 374,
+                                          height: 56,
+                                          decoration: ShapeDecoration(
+                                            color:AppColor.grey10,
+                                            shape: RoundedRectangleBorder(
+                                              borderRadius: BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              provider.selectedTime != null
+                                                  ? provider.selectedTime!.format(context)
+                                                  : "Select Time",
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+
+                                      Padding(
+                                        padding: const EdgeInsets.all(20),
+                                        child: CustomButton(
+                                          text: (provider.selectedDate != null && provider.selectedTime != null)
+                                              ? 'Continue'
+                                              : 'Book Now',
+                                          textStyle: AppStyle.caption1.copyWith(color: AppColor.black),
+                                          functions: () {
+                                            Navigator.pushNamed(context, RoutName.checkoutPage);
+
+                                        },),
+                                      )
+
+
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+
+                        },
+                      );
+                    },
+                  ),
+                  SizedBox(height: 30.h,),
+
+                ],
+              ),
             ),
           ),
 

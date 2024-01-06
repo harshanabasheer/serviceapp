@@ -18,6 +18,7 @@ import '../screens/on_board_screen.dart';
 import '../screens/payment_page.dart';
 import '../screens/service_detail.dart';
 import '../screens/service_page.dart';
+import '../screens/success_page.dart';
 
 class Routing{
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -57,9 +58,8 @@ class Routing{
         return MaterialPageRoute(builder: (_) => PaymentPage());
       case RoutName.addCard:
         return MaterialPageRoute(builder: (_) => AddCard());
-
-      // case RoutName.bookingConform:
-      //   return MaterialPageRoute(builder: (_) => BookingConform());
+      case RoutName.successPage:
+        return MaterialPageRoute(builder: (_) => SuccessPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

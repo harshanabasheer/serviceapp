@@ -5,10 +5,12 @@ import '../utils/constants/text_styles.dart';
 
 class CustomRow extends StatelessWidget {
   final String text;
+  final bool buttonvisible;
   final VoidCallback functions;
   const CustomRow({
     required this.text,
     required this.functions,
+    this.buttonvisible = true,
     super.key,
   });
 
@@ -18,7 +20,8 @@ class CustomRow extends StatelessWidget {
       children: [
         Text(text,style: AppStyle.headline.copyWith(color: AppColor.black)),
         Spacer(),
-        ElevatedButton(
+         buttonvisible?
+         ElevatedButton(
           onPressed: functions,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColor.grey10,
@@ -27,7 +30,7 @@ class CustomRow extends StatelessWidget {
             ),
           ),
           child: Text('Add +',style: AppStyle.footNote.copyWith(color: AppColor.black)),
-        ),
+        ) :Icon(Icons.check,color: Colors.green,)
       ],
     );
   }

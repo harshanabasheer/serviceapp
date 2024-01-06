@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 
@@ -31,5 +32,20 @@ class ApiHelper {
     }catch(e){
       print(e);
     }
+  }
+
+ //payment
+  Future<http.Response> paymentPost({required String userName,required String password,required Map<String,dynamic>  data}) {
+    String basicAuth =
+        'Basic ${base64Encode(utf8.encode('$userName:$password'))}';
+    return  http.post(
+      Uri.https(
+          "api.razorpay.com", "v1/orders"),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        'authorization': basicAuth,
+      },
+      body: jsonEncode(data),
+    );
   }
 }

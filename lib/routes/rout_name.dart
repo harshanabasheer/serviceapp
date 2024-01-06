@@ -14,6 +14,6 @@ class RoutName{
   static const phonePage='/phonePage';
   static const paymentPage='/paymentPage';
   static const addCard='/addCard';
-  static const bookingConform='/bookingConform';
+  static const successPage='/successPage';
 
 }

@@ -79,9 +79,6 @@ class _SeeAllServicesState extends State<SeeAllServices> {
                   itemBuilder: (context, index) {
                     return GestureDetector(
                       onTap: ()  {
-                       // final categoryId= controller.categories?.data![index].id;
-                        //await controller.getAllServiceController(context, categoryId!);
-
                         Navigator.pushNamed(
                           context,
                           RoutName.serviceDetailPage,

@@ -20,6 +20,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     Provider.of<HomeController>(context,listen: false).getAllCategoriesController();
+    Provider.of<HomeController>(context,listen: false).getRecommentedServiceController(context);
     super.initState();
   }
 
@@ -184,216 +185,225 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               height: 100.h,
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Select Service",
-                    style: AppStyle.headline.copyWith(color: AppColor.black)),
-                SizedBox(
-                  width: 120.w,
-                ),
-                CustomTextButton(
-                  text: "See All",
-                  textStyle:
-                      AppStyle.body2book.copyWith(color: AppColor.grey40),
-                  functions: () {
-                    Navigator.pushNamed(context, RoutName.selectService);
-                  },
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 95.h,
-                child:
-                controller.loading?
-                const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.darkYellow,
-                  ),
-                ):
-                ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: controller.categories?.data?.length,
-                  itemBuilder: (context, index) {
-                    return
-                      Card(
-                      color: AppColor.background,
-                      child: Container(
-                        width: 79.w,
-                        height: 85.h,
-                        child: Column(
-                          children: [
-                            Image.network(
-                             "${Apiconstants.baseurl}${controller.categories?.data![index].categoryImage}",
-                              width: 40.w,
-                              height: 40.h,
-                              fit: BoxFit.cover,
-                            ),
-                            SizedBox(
-                              height: 10.h,
-                            ),
-                            Text(
-                              controller.categories?.data?[index].categoryName ?? 'No Category',
-                              style: AppStyle.body2book.copyWith(color: AppColor.black),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Cleaning Service",
-                    style: AppStyle.headline.copyWith(color: AppColor.black)),
-                SizedBox(
-                  width: 120.w,
-                ),
-                CustomTextButton(
-                  text: "See All",
-                  textStyle:
-                      AppStyle.body2book.copyWith(color: AppColor.grey40),
-                  functions: () {
-                    Navigator.pushNamed(context, RoutName.forgotPasswordPage);
-                  },
-                ),
-              ],
-            ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 110.h,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: AppColor.background,
-                      child: Container(
-                        width: 340.w,
-                        height: 110.h,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(20),
-                              child: Image.asset(
-                                'assets/images/cleaning.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            SizedBox(width: 20.h),
-                            Expanded(
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Select Service",
+                          style: AppStyle.headline.copyWith(color: AppColor.black)),
+                      CustomTextButton(
+                        text: "See All",
+                        textStyle:
+                        AppStyle.body2book.copyWith(color: AppColor.grey40),
+                        functions: () {
+                          Navigator.pushNamed(context, RoutName.selectService);
+                        },
+                      ),
+                    ],
+                  ),
+                  Container(
+                    height: 95.h,
+                    child:
+                    controller.loading?
+                    const Center(
+                      child: CircularProgressIndicator(
+                        color: AppColor.darkYellow,
+                      ),
+                    ):
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.categories?.data?.length,
+                      itemBuilder: (context, index) {
+                        return
+                          GestureDetector(
+                            onTap: ()  {
+                              Navigator.pushNamed(
+                                  context,
+                                  RoutName.serviceDetailPage,
+                                  arguments: controller.categories?.data![index].id
+                              );
+                            },
+                            child: Card(
+                            color: AppColor.background,
+                            child: Container(
+                              width: 79.w,
+                              height: 85.h,
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Home Cleaning Service',
-                                    style: AppStyle.subHeadline
-                                        .copyWith(color: AppColor.black),
+                                  Image.network(
+                                   "${Apiconstants.baseurl}${controller.categories?.data![index].categoryImage}",
+                                    width: 40.w,
+                                    height: 40.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  SizedBox(
+                                    height: 10.h,
                                   ),
                                   Text(
-                                    '\$15.00',
-                                    style: AppStyle.body2book
-                                        .copyWith(color: AppColor.black),
-                                  ),
-                                  Row(
-                                    children: [
-                                      const Icon(
-                                        Icons.star,
-                                        color: Color(0xFFFFC107),
-                                      ),
-                                      Text(
-                                        '4.5',
-                                        style: AppStyle.body2book
-                                            .copyWith(color: AppColor.black),
-                                      ),
-                                      SizedBox(
-                                        width: 100.w,
-                                      ),
-                                      Text(
-                                        'Off 10%',
-                                        style: AppStyle.body2book
-                                            .copyWith(color: AppColor.grey40),
-                                      ),
-                                    ],
+                                    controller.categories?.data?[index].categoryName ?? 'No Category',
+                                    style: AppStyle.body2book.copyWith(color: AppColor.black),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
                         ),
-                      ),
-                    );
-                  },
-                ),
+                          );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Text("Recommended",
-                    style: AppStyle.headline.copyWith(color: AppColor.black)),
-                SizedBox(
-                  width: 120.w,
-                ),
-                CustomTextButton(
-                  text: "See All",
-                  textStyle:
-                      AppStyle.body2book.copyWith(color: AppColor.grey40),
-                  functions: () {
-                    Navigator.pushNamed(context, RoutName.forgotPasswordPage);
-                  },
-                ),
-              ],
-            ),
+
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 200.h,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      color: AppColor.background,
-                      child: Container(
-                        width: 142.w,
-                        height: 181.h,
-                        child: Column(
-                          children: [
-                            Image.asset(
-                              'assets/images/acrepair.png',
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Cleaning Service",
+                        style: AppStyle.headline.copyWith(color: AppColor.black)),
+                  ),
+                  SizedBox(height: 10.h,),
+                  Container(
+                    height: 110.h,
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: 10,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: AppColor.background,
+                          child: Container(
+                            width: 340.w,
+                            height: 110.h,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Image.asset(
+                                    'assets/images/cleaning.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                SizedBox(width: 20.h),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Home Cleaning Service',
+                                        style: AppStyle.subHeadline
+                                            .copyWith(color: AppColor.black),
+                                      ),
+                                      Text(
+                                        '\$15.00',
+                                        style: AppStyle.body2book
+                                            .copyWith(color: AppColor.black),
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.star,
+                                            color: Color(0xFFFFC107),
+                                          ),
+                                          Text(
+                                            '4.5',
+                                            style: AppStyle.body2book
+                                                .copyWith(color: AppColor.black),
+                                          ),
+                                          SizedBox(
+                                            width: 100.w,
+                                          ),
+                                          Text(
+                                            'Off 10%',
+                                            style: AppStyle.body2book
+                                                .copyWith(color: AppColor.grey40),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text("Recommended",
+                        style: AppStyle.headline.copyWith(color: AppColor.black)),
+                  ),
+                  SizedBox(height: 10.h,),
+                  Container(
+                    height: 200.h,
+                    child:controller.loading?Center(child: CircularProgressIndicator(color: AppColor.darkYellow,),)
+                        :
+                    ListView.builder(
+                      shrinkWrap: true,
+                      scrollDirection: Axis.horizontal,
+                      itemCount: controller.recommentedServices?.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: AppColor.background,
+                          child: GestureDetector(
+                            onTap: () {
+
+                              Navigator.pushNamed(
+                                  context,
+                                  RoutName.bookingPage,
+                                  arguments: controller.recommentedServices?[index].id
+                              );
+                            },
+
+                            child: Container(
                               width: 142.w,
-                              height: 126.h,
-                              fit: BoxFit.cover,
+                              height: 181.h,
+                              child: Column(
+                                children: [
+                                  Image.network(
+                                    "${Apiconstants.baseurl}${controller.recommentedServices?[index].serviceImage}",
+                                    width: 142.w,
+                                    height: 126.h,
+                                    fit: BoxFit.cover,
+                                  ),
+                                  Text(
+                                    controller.recommentedServices?[index].serviceName ?? 'No Service',
+                                    style: AppStyle.subHeadline
+                                        .copyWith(color: AppColor.black),
+                                  ),
+                                  Text(
+                                    '\$ ${controller.recommentedServices?[index].price ?? 'No Price'}',
+                                    style: AppStyle.body2book
+                                        .copyWith(color: AppColor.black),
+                                  ),
+                                ],
+                              ),
                             ),
-                            Text(
-                              'AC Repair Service',
-                              style: AppStyle.subHeadline
-                                  .copyWith(color: AppColor.black),
-                            ),
-                            Text(
-                              '\$30.00',
-                              style: AppStyle.body2book
-                                  .copyWith(color: AppColor.black),
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
               ),
             ),
           ],

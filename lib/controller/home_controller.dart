@@ -11,6 +11,7 @@ class HomeController extends ChangeNotifier{
   CategoryModel ? categories ;
   List<ServiceModel> ? services;
   ServiceModel ? oneService;
+  List<ServiceModel> ? recommentedServices;
 
   Future<void> getAllCategoriesController() async {
     try {
@@ -54,6 +55,21 @@ class HomeController extends ChangeNotifier{
 
     } catch (error) {
 
+      services = null;
+      loading = false;
+      notifyListeners();
+      print('Error occurred: $error');
+    }
+  }
+
+  Future<void> getRecommentedServiceController(BuildContext context) async {
+    try {
+      loading = true;
+      notifyListeners();
+      recommentedServices = await apiService.recommentedService();
+      loading = false;
+      notifyListeners();
+    } catch (error) {
       services = null;
       loading = false;
       notifyListeners();
