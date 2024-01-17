@@ -9,7 +9,6 @@ import '../utils/constants/text_styles.dart';
 
 class ServiceDetail extends StatefulWidget {
 
-
   final  int  categoryId;
   const ServiceDetail({super.key, required this.categoryId});
 
@@ -34,7 +33,9 @@ class _ServiceDetailState extends State<ServiceDetail> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Ac Repaire',style: AppStyle.title3.copyWith(color: AppColor.black)),
+        title: Text(controller.services != null && controller.services!.isNotEmpty
+            ? controller.services![0].categoryName ?? ''
+            : '',style: AppStyle.title3.copyWith(color: AppColor.black)),
       ),
       body: controller.loading?Center(child: CircularProgressIndicator(color: AppColor.darkYellow,),)
           :
@@ -42,34 +43,6 @@ class _ServiceDetailState extends State<ServiceDetail> {
       Center(child: Text('No data'),)
           : Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              width: 374.w,
-              height: 44.h,
-              decoration: ShapeDecoration(
-                color: AppColor.grey10,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-              ),
-              child: const Row(
-                children: [
-                  SizedBox(width: 16),
-                  Icon(Icons.search),
-                  SizedBox(width: 8),
-                  Expanded(
-                    child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Search',
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           Expanded(
             child: GridView.builder(
               shrinkWrap: true,

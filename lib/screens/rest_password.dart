@@ -48,12 +48,6 @@ class _RestPasswordState extends State<RestPassword> {
             children: [
               CustomTextFeild(
                 controller: _passwordController,
-                hinttext: "Old Password",
-                preICon: Icon(Icons.lock_outline),
-                sufIcon: Icon(Icons.remove_red_eye_outlined),),
-              SizedBox(height: 20,),
-              CustomTextFeild(
-                controller: _passwordController,
                 hinttext: "New Password",
                 preICon: Icon(Icons.lock_outline),
                 sufIcon: Icon(Icons.remove_red_eye_outlined),),

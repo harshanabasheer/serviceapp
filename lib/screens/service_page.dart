@@ -26,40 +26,15 @@ class _SeeAllServicesState extends State<SeeAllServices> {
     final controller = context.watch<HomeController>();
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("All Services",style: AppStyle.title3.copyWith(color: AppColor.black)),
+      ),
       body:
       Padding(
         padding: const EdgeInsets.only(top: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                width: 374,
-                height: 44,
-                decoration: ShapeDecoration(
-                  color: AppColor.grey10,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
-                child: Row(
-                  children: [
-                    SizedBox(width: 16),
-                    Icon(Icons.search),
-                    SizedBox(width: 8),
-                    Expanded(
-                      child: TextField(
-                        decoration: InputDecoration(
-                          hintText: 'Search',
-                          border: InputBorder.none,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

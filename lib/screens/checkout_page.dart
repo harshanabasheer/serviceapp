@@ -321,12 +321,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     return provider.paymentId != null &&
                             provider.address != null &&
                             provider.phone != null
-                        ? CustomButton(
+                        ? provider.loading?Center(child: CircularProgressIndicator(color: AppColor.darkYellow,),):
+                    CustomButton(
                             text: 'Place Booking',
                             textStyle: AppStyle.caption1
                                 .copyWith(color: AppColor.black),
-                            functions: () {
-                             provider.placeBookingController(
+                            functions: ()async{
+                            await provider.placeBookingController(
                                  context: context,
                                  userId: "3",
                                  userName: "harshana",
@@ -345,7 +346,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 backgroundColor: AppColor.grey10,
                                 minimumSize: const Size.fromHeight(50),
                                 shape: const StadiumBorder()),
-                            child: Text("Place Order",
+                            child:
+                            Text("Place Order",
                                 style: AppStyle.caption1
                                     .copyWith(color: AppColor.black)),
                           );

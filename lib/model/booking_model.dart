@@ -1,28 +1,4 @@
-class PlaceBookingModel {
-  Data? data;
-  String? message;
-  bool? success;
-
-  PlaceBookingModel({this.data, this.message, this.success});
-
-  PlaceBookingModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    message = json['message'];
-    success = json['success'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['message'] = this.message;
-    data['success'] = this.success;
-    return data;
-  }
-}
-
-class Data {
+class BookingModel {
   int? id;
   String? userId;
   String? userName;
@@ -35,8 +11,9 @@ class Data {
   String? status;
   String? address;
   String? price;
+  String? serviceImage;
 
-  Data(
+  BookingModel(
       {this.id,
         this.userId,
         this.userName,
@@ -48,9 +25,10 @@ class Data {
         this.time,
         this.status,
         this.address,
-        this.price});
+        this.price,
+        this.serviceImage});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  BookingModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['UserId'];
     userName = json['UserName'];
@@ -63,6 +41,7 @@ class Data {
     status = json['Status'];
     address = json['Address'];
     price = json['Price'];
+    serviceImage = json['ServiceImage'];
   }
 
   Map<String, dynamic> toJson() {
@@ -79,6 +58,7 @@ class Data {
     data['Status'] = this.status;
     data['Address'] = this.address;
     data['Price'] = this.price;
+    data['ServiceImage'] = this.serviceImage;
     return data;
   }
 }

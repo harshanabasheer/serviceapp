@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:serviceapp/model/user_model.dart';
 
 class ApiHelper {
   postData({required data, required apiUrl}) async {
@@ -33,6 +34,20 @@ class ApiHelper {
       print(e);
     }
   }
+  putData({required data, required apiUrl}) async {
+    try {
+      final res =  await http.put(Uri.parse(apiUrl),body: data);
+      return res;
+    } on SocketException {
+      throw Exception("No Internet");
+    } on HttpException {
+      throw Exception("Couldn't find the post ?");
+    } on FormatException {
+      throw Exception("Bad response format ?");
+    }catch(e){
+      print(e);
+    }
+  }
 
  //payment
   Future<http.Response> paymentPost({required String userName,required String password,required Map<String,dynamic>  data}) {
@@ -48,4 +63,7 @@ class ApiHelper {
       body: jsonEncode(data),
     );
   }
+
+
+
 }

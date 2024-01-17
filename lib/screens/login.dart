@@ -105,29 +105,9 @@ class _LoginState extends State<Login> {
 
                 },
               ),
+
               SizedBox(
-                height: 40.h,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Sign in with",
-                  style: AppStyle.bodyBook.copyWith(color: AppColor.black),
-                ),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: _handleSignIn,
-                child: Image.asset(
-                  'assets/images/Google.png',
-                  height: 50,
-                  width: 50,
-                ),
-              ),
-              SizedBox(
-                height: 180.h,
+                height: 280.h,
               ),
               Align(
                 alignment: Alignment.bottomCenter,

@@ -48,7 +48,7 @@ class _SuccessPageState extends State<SuccessPage> {
               text:"OK",textStyle: AppStyle.caption1.copyWith(color: AppColor.black) ,
               functions:(){
                 context.read<BookingController>().clearData();
-                Navigator.pushNamedAndRemoveUntil(context, RoutName.homepage, (route) => false);
+                Navigator.pushNamedAndRemoveUntil(context, RoutName.bottomBarPage, (route) => false);
               } ,),
           ],
         ),

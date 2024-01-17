@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -7,11 +9,14 @@ import '../model/user_model.dart';
 import '../routes/rout_name.dart';
 import '../services/api_services.dart';
 import '../services/firebase_authentication_service.dart';
+import '../widget/alert.dart';
 
 class AuthController extends ChangeNotifier {
   bool obscureText = true;
   String? validEmail;
   bool loading = false;
+  UserModel ? user;
+  bool resendTime = false;
   final ApiService apiService = ApiService();
   final FirebaseAuthentication firebaseService = FirebaseAuthentication();
 
@@ -52,7 +57,7 @@ class AuthController extends ChangeNotifier {
           loading = true;
           notifyListeners();
           await apiService.signIn(email: email, password: password);
-          Navigator.pushNamed(context, RoutName.homepage);
+          Navigator.pushReplacementNamed(context, RoutName.bottomBarPage);
           loading = false;
           notifyListeners();
         }
@@ -94,16 +99,28 @@ class AuthController extends ChangeNotifier {
         } else {
           loading = true;
           notifyListeners();
-          var result = await apiService.registerUser(
-
+           user = await apiService.registerUser(
             name: name,
             phone: phone,
             email: email,
             password: password,
           );
-          await firebaseService.sendOTP('r6r6r');
-          //  otpSend(email: result.data!.email!, context: context);
 
+          // Send OTP for phone number verification
+          await FirebaseAuth.instance.verifyPhoneNumber(
+            verificationCompleted: (PhoneAuthCredential credential) {},
+            verificationFailed: (FirebaseAuthException ex) {},
+            codeSent: (String verificationId, int? resendToken) {
+              Navigator.pushNamed(context, RoutName.otpPage,
+                  arguments:verificationId,
+              );
+            },
+            codeAutoRetrievalTimeout: (String verificationId) {
+
+            },
+            phoneNumber: "+91$phone",
+            timeout: Duration(seconds: 30)
+          );
           loading = false;
           notifyListeners();
         }
@@ -126,6 +143,75 @@ class AuthController extends ChangeNotifier {
       }
     }
   }
+
+  Future<void> verifyOTPAndSignIn(BuildContext context,String verificationId,String controller) async {
+    try {
+      PhoneAuthCredential credential = PhoneAuthProvider.credential(
+        verificationId:verificationId,
+        smsCode:controller,
+      );
+      await FirebaseAuth.instance.signInWithCredential(credential);
+      _showConfirmationDialog(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            e.toString(),
+          ),
+        ),
+      );
+
+    }
+  }
+
+  void _showConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlert(
+            image: 'assets/images/security.png',
+            tex1: "Account Created",
+            text2: "Your account has been successfully created!");
+      },
+    );
+  }
+
+  Future<void> resendOTP(String phone, BuildContext context) async {
+    try {
+      resendTime = true;
+      notifyListeners();
+      await FirebaseAuth.instance.verifyPhoneNumber(
+        phoneNumber: "+91$phone",
+        verificationCompleted: (PhoneAuthCredential credential) {
+        },
+        verificationFailed: (FirebaseAuthException ex) {},
+        codeSent: (String verificationId, int? resendToken) {
+        },
+        codeAutoRetrievalTimeout: (String verificationId) {},
+      );
+      resendTime = false;
+      notifyListeners();
+    } catch (e) {
+      resendTime = false;
+      notifyListeners();
+      print(e);
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString(),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+
+
+
+
+
 
 
 // void otpSend({

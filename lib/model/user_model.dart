@@ -1,28 +1,4 @@
 class UserModel {
-  Data? data;
-  String? message;
-  bool? success;
-
-  UserModel({this.data, this.message, this.success});
-
-  UserModel.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    message = json['message'];
-    success = json['success'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    data['message'] = this.message;
-    data['success'] = this.success;
-    return data;
-  }
-}
-
-class Data {
   int? id;
   String? name;
   String? address;
@@ -32,12 +8,12 @@ class Data {
   String? password;
   String? role;
   String? city;
-  Null? photo;
-  Null? category;
+  dynamic? photo;
+  dynamic? category;
   String? status;
   int? login;
 
-  Data(
+  UserModel(
       {this.id,
         this.name,
         this.address,
@@ -52,7 +28,7 @@ class Data {
         this.status,
         this.login});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  UserModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['Name'];
     address = json['Address'];

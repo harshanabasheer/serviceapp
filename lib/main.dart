@@ -10,7 +10,9 @@ import 'package:serviceapp/controller/profile_controller.dart';
 import 'package:serviceapp/controller/rout_controller.dart';
 import 'package:serviceapp/routes/rout_name.dart';
 import 'package:serviceapp/routes/routing.dart';
+import 'package:serviceapp/screens/bottombar.dart';
 import 'controller/auth_controller.dart';
+import 'controller/bottom_bar_controller.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,6 +26,7 @@ void main()async{
       ChangeNotifierProvider(create: (_) =>PaymentController ()),
       ChangeNotifierProvider(create: (_) =>ProfileController ()),
       ChangeNotifierProvider(create: (_) =>RoutController ()),
+      ChangeNotifierProvider(create: (_) => BottomBarController()),
     ],
      child: const MyApp(),
     ));
@@ -46,6 +49,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Routing.generateRoute,
           initialRoute: RoutName.onBoardingPage,
+          // home: BottomBar(),
         );
       }
     );

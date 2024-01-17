@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:serviceapp/routes/rout_name.dart';
 import 'package:serviceapp/screens/forgot.dart';
@@ -8,22 +9,24 @@ import 'package:serviceapp/screens/login.dart';
 import 'package:serviceapp/screens/otp_page.dart';
 import 'package:serviceapp/screens/phone_page.dart';
 import 'package:serviceapp/screens/rest_password.dart';
+import 'package:serviceapp/screens/search_page.dart';
 import 'package:serviceapp/screens/signup.dart';
 
+import '../model/user_model.dart';
 import '../screens/add_card.dart';
 import '../screens/adress_page.dart';
 import '../screens/booking_page.dart';
+import '../screens/bottombar.dart';
 import '../screens/checkout_page.dart';
 import '../screens/on_board_screen.dart';
 import '../screens/payment_page.dart';
 import '../screens/service_detail.dart';
 import '../screens/service_page.dart';
 import '../screens/success_page.dart';
+import '../screens/update_page.dart';
 
 class Routing{
   static Route<dynamic> generateRoute(RouteSettings settings) {
-
-
 
     switch (settings.name) {
       case RoutName.onBoardingPage:
@@ -37,7 +40,8 @@ class Routing{
       case RoutName.signUpPage:
         return MaterialPageRoute(builder: (_) => SignUp());
       case RoutName.otpPage:
-        return MaterialPageRoute(builder: (_) => OtpPage());
+        final  id = settings.arguments as String;
+        return MaterialPageRoute(builder: (_) => OtpPage(verificationId : id,));
       case RoutName.homepage:
         return MaterialPageRoute(builder: (_) =>  HomePage());
       case RoutName.selectService:
@@ -60,6 +64,15 @@ class Routing{
         return MaterialPageRoute(builder: (_) => AddCard());
       case RoutName.successPage:
         return MaterialPageRoute(builder: (_) => SuccessPage());
+      case RoutName.bottomBarPage:
+        return MaterialPageRoute(builder: (_) => BottomBar());
+      case RoutName.updatePage:
+        // final args = settings.arguments as Map<String, dynamic> ?? {};
+        // final user = args['user'] as UserModel ?? UserModel();
+         final  userId = settings.arguments as int;
+        return MaterialPageRoute(builder: (_) => EditProfilePage());
+      case RoutName.searchPage:
+        return MaterialPageRoute(builder: (_) => SearchPage());
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(

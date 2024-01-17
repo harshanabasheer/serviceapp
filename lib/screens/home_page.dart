@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:serviceapp/controller/home_controller.dart';
 import 'package:serviceapp/utils/constants/api_constants.dart';
 import 'package:serviceapp/widget/text_button.dart';
+import '../controller/profile_controller.dart';
 import '../routes/rout_name.dart';
 import '../utils/constants/app_color.dart';
 import '../utils/constants/text_styles.dart';
@@ -19,18 +20,17 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    Provider.of<HomeController>(context,listen: false).handleLocationPermission(context);
     Provider.of<HomeController>(context,listen: false).getAllCategoriesController();
     Provider.of<HomeController>(context,listen: false).getRecommentedServiceController(context);
+    Provider.of<HomeController>(context,listen: false).getAllCleaningServiceController(context);
+    Provider.of<HomeController>(context,listen: false).locatePosition();
     super.initState();
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final controller = context.watch<HomeController>();
-
 
     return Scaffold(
       key: _scaffoldKey,
@@ -107,35 +107,38 @@ class _HomePageState extends State<HomePage> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(30),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      IconButton(
-                        icon: const Icon(Icons.notes),
-                        onPressed: () {
-                          _scaffoldKey.currentState?.openDrawer();
-                        },
-                      ),
+                  child: Consumer<HomeController>(
+                    builder: (context,provider,_) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.notes),
+                            onPressed: () {
+                              _scaffoldKey.currentState?.openDrawer();
+                            },
+                          ),
 
-                       SizedBox(width: 100.w),
-                      Expanded(
-                        child: Center(
-                          child: Row(
-                            children: [
-                              const Icon(Icons.location_on),
-                              Text(
-                                "Calicut",
+                           SizedBox(width: 70.w),
+                          const Icon(Icons.location_on),
+                          Consumer<HomeController>(
+                            builder: (context,provider,_) {
+                              return Text(
+                                provider.location == null
+                                    ? 'Loading...'
+                                    : provider.location!.toString(),
                                 style: AppStyle.body2book
                                     .copyWith(color: AppColor.black),
-                              ),
-                            ],
+                              );
+                            }
                           ),
-                        ),
-                      ),
-                       SizedBox(width: 100.w),
-                      const Icon(Icons.notifications),
-                    ],
+
+                           SizedBox(width: 70.w),
+                          const Icon(Icons.notifications),
+                        ],
+                      );
+                    }
                   ),
                 ),
                 Positioned(
@@ -157,8 +160,11 @@ class _HomePageState extends State<HomePage> {
                         SizedBox(width: 8.w),
                         Expanded(
                           child: TextField(
+                            onTap:(){
+                              Navigator.pushNamed(context, RoutName.searchPage);
+                            } ,
                             decoration: InputDecoration(
-                              hintText: 'Search',
+                              hintText: 'Search...',
                               border: InputBorder.none,
                             ),
                           ),
@@ -272,67 +278,70 @@ class _HomePageState extends State<HomePage> {
                   SizedBox(height: 10.h,),
                   Container(
                     height: 110.h,
-                    child: ListView.builder(
+                    child:controller.loading?Center(child: CircularProgressIndicator(color: AppColor.darkYellow,),)
+                        : ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: 10,
+                      itemCount: controller.cleaningServices?.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          color: AppColor.background,
-                          child: Container(
-                            width: 340.w,
-                            height: 110.h,
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: Image.asset(
-                                    'assets/images/cleaning.png',
-                                    fit: BoxFit.cover,
+                        return GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context,
+                                RoutName.bookingPage,
+                                arguments: controller.cleaningServices?[index].id
+                            );
+                          },
+                          child: Card(
+                            color: AppColor.background,
+                            child: Container(
+                              width: 340.w,
+                              height: 110.h,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(20),
+                                    child:  Image.network(
+                                      "${Apiconstants.baseurl}${controller.cleaningServices?[index].serviceImage}",
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                ),
-                                SizedBox(width: 20.h),
-                                Expanded(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Home Cleaning Service',
-                                        style: AppStyle.subHeadline
-                                            .copyWith(color: AppColor.black),
-                                      ),
-                                      Text(
-                                        '\$15.00',
-                                        style: AppStyle.body2book
-                                            .copyWith(color: AppColor.black),
-                                      ),
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.star,
-                                            color: Color(0xFFFFC107),
-                                          ),
-                                          Text(
-                                            '4.5',
-                                            style: AppStyle.body2book
-                                                .copyWith(color: AppColor.black),
-                                          ),
-                                          SizedBox(
-                                            width: 100.w,
-                                          ),
-                                          Text(
-                                            'Off 10%',
-                                            style: AppStyle.body2book
-                                                .copyWith(color: AppColor.grey40),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                  SizedBox(width: 20.h),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          controller.cleaningServices?[index].serviceName ?? 'No Service',
+                                          style: AppStyle.subHeadline
+                                              .copyWith(color: AppColor.black),
+                                        ),
+                                        Text(
+                                          '\$${controller.cleaningServices?[index].price}',
+                                          style: AppStyle.body2book
+                                              .copyWith(color: AppColor.black),
+                                        ),
+                                        Row(
+                                          children: [
+                                            const Icon(
+                                              Icons.star,
+                                              color: Color(0xFFFFC107),
+                                            ),
+                                            Text(
+                                              controller.cleaningServices?[index].rating ?? 'No Rating',
+                                              style: AppStyle.body2book
+                                                  .copyWith(color: AppColor.black),
+                                            ),
+                                          ],
+                                        ),
+
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         );
@@ -360,20 +369,18 @@ class _HomePageState extends State<HomePage> {
                     ListView.builder(
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemCount: controller.recommentedServices?.length,
+                      itemCount: 7,
                       itemBuilder: (context, index) {
                         return Card(
                           color: AppColor.background,
                           child: GestureDetector(
                             onTap: () {
-
                               Navigator.pushNamed(
                                   context,
                                   RoutName.bookingPage,
                                   arguments: controller.recommentedServices?[index].id
                               );
                             },
-
                             child: Container(
                               width: 142.w,
                               height: 181.h,
@@ -412,7 +419,6 @@ class _HomePageState extends State<HomePage> {
 
     );
   }
-
   GestureDetector buildGestureDetector(Icon icon,String text) {
     return GestureDetector(
               onTap: () {

@@ -83,12 +83,13 @@ class _BookingPageState extends State<BookingPage> {
                             style: AppStyle.title3.copyWith(color: AppColor.black)
                         ),
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Text(
                                 '\$ ${controller.oneService?.price ?? 'No Price'}',
                                 style: AppStyle.bodyBook.copyWith(color: AppColor.black)
                             ),
-                            SizedBox(width: 250.w,),
+                            SizedBox(width: 240.w,),
                             const Icon(
                               Icons.star,
                               color: Color(0xFFFFC107),

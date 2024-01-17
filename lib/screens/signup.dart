@@ -1,8 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 import 'package:serviceapp/routes/rout_name.dart';
+import 'package:serviceapp/screens/otp_page.dart';
 import 'package:serviceapp/utils/constants/app_color.dart';
 import 'package:serviceapp/utils/constants/text_styles.dart';
 import 'package:serviceapp/widget/button.dart';
@@ -76,23 +78,23 @@ class _SignUpState extends State<SignUp> {
                 hinttext: "Phone Number",
                 obscureText: controller.obscureText,
                 preICon: Icon(Icons.phone),
-                  sufIcon: GestureDetector(
-                    onTap: () {
-                      controller.viewPassword();
-                    },
-                    child: Icon(controller.obscureText
-                        ? Icons.visibility
-                        : Icons.visibility_off),
-                  ),
+                sufIcon: GestureDetector(
+                  onTap: () {
+                    controller.viewPassword();
+                  },
+                  child: Icon(controller.obscureText
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                ),
               ),
               SizedBox(
                 height: 20,
               ),
               CustomTextFeild(
-                controller: _passwordController,
-                hinttext: "Password",
+                  controller: _passwordController,
+                  hinttext: "Password",
                   obscureText: controller.obscureText,
-                preICon: Icon(Icons.lock_outline),
+                  preICon: Icon(Icons.lock_outline),
                   sufIcon: GestureDetector(
                     onTap: () {
                       controller.viewPassword();
@@ -100,8 +102,7 @@ class _SignUpState extends State<SignUp> {
                     child: Icon(controller.obscureText
                         ? Icons.visibility
                         : Icons.visibility_off),
-                  )
-              ),
+                  )),
               SizedBox(
                 height: 40.h,
               ),
@@ -115,14 +116,13 @@ class _SignUpState extends State<SignUp> {
                       text: "Sign Up",
                       textStyle:
                           AppStyle.caption1.copyWith(color: AppColor.black),
-                      functions: () {
+                      functions: () async {
                         controller.register(
-                            name: _nameController.text,
-                            phone: _phoneController.text,
-                            email: _usernameController.text,
-                            password: _passwordController.text,
-                            context: context);
-                        // Navigator.pushNamed(context, RoutName.otpPage);
+                                      name: _nameController.text,
+                                      phone: _phoneController.text,
+                                      email: _usernameController.text,
+                                      password: _passwordController.text,
+                                      context: context);
                       },
                     ),
               SizedBox(

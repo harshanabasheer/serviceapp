@@ -19,6 +19,7 @@ class BookingController extends ChangeNotifier {
   String? price;
   String?paymentId;
   bool loading = false;
+  List<BookingModel> ? allBookings;
 
   DateTime? get selectedDate => _selectedDate;
   TimeOfDay? get selectedTime => _selectedTime;
@@ -136,7 +137,7 @@ class BookingController extends ChangeNotifier {
   }
 
   //place booking
-  Future<PlaceBookingModel> placeBookingController({
+  Future<void> placeBookingController({
     required BuildContext context,
     required String userId,
     required String userName,
@@ -152,7 +153,8 @@ class BookingController extends ChangeNotifier {
     try {
       loading = true;
       notifyListeners();
-      PlaceBookingModel booking = await apiService.placeBooking(
+
+      BookingModel booking = await apiService.placeBooking(
         userId: userId,
         userName: userName,
         serviceId: serviceId,
@@ -163,17 +165,41 @@ class BookingController extends ChangeNotifier {
         address: address,
         price: price,
       );
-      Navigator.pushNamed(context, RoutName.successPage);
+      Navigator.pushReplacementNamed(context, RoutName.successPage);
       loading = false;
       notifyListeners();
-      return booking;
 
 
     } catch (e) {
-      print('Failed to place booking: $e');
-      throw e;
+      loading = false;
+      notifyListeners();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString(),
+            ),
+          ),
+        );
+      }
     }
   }
+
+  //all bookings
+  Future<void> getAllBookingsController(BuildContext context) async {
+    try {
+      loading = true;
+      notifyListeners();
+      allBookings = await apiService.getAllBookings();
+      loading = false;
+      notifyListeners();
+    } catch (error) {
+      loading = false;
+      notifyListeners();
+      print('Error occurred: $error');
+    }
+  }
+
 
 
 }

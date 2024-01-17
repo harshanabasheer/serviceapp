@@ -7,6 +7,7 @@ class ServiceModel {
   String? description;
   int? categoryId;
   String ? rating;
+  String ? categoryName;
 
   ServiceModel(
       {this.id,
@@ -15,7 +16,8 @@ class ServiceModel {
         this.price,
         this.description,
         this.categoryId,
-        this.rating});
+        this.rating,
+        this.categoryName});
 
   ServiceModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -25,6 +27,7 @@ class ServiceModel {
     description = json['Description'];
     categoryId = json['CategoryId'];
     rating = json['Rating'];
+    categoryName = json['CategoryName'];
   }
 
   Map<String, dynamic> toJson() {
@@ -36,6 +39,7 @@ class ServiceModel {
     data['Description'] = this.description;
     data['CategoryId'] = this.categoryId;
     data['Rating'] = this.rating;
+    data['CategoryName'] = this.categoryName;
     return data;
   }
 }
