@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
                   text: "Forgot Password?",
                   textStyle: AppStyle.bodyBook.copyWith(color: AppColor.black),
                   functions: () {
-                    Navigator.pushNamed(context, RoutName.forgotPasswordPage);
+                    Navigator.pushNamed(context, RoutName.restPasswordPage);
                   },
                 ),
               ),
@@ -100,7 +100,7 @@ class _LoginState extends State<Login> {
              CustomButton(
                 text: "Sign In",
                 textStyle: AppStyle.caption1.copyWith(color: AppColor.black),
-                functions: () {
+                functions: () async{
                   controller.signIn(password: _passwordController.text, email: _usernameController.text,context: context);
 
                 },

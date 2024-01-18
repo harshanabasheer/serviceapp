@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:serviceapp/controller/auth_controller.dart';
 import 'package:serviceapp/routes/rout_name.dart';
 import 'package:serviceapp/utils/constants/app_color.dart';
 import 'package:serviceapp/utils/constants/text_styles.dart';
@@ -15,6 +17,8 @@ class RestPassword extends StatefulWidget {
 
 class _RestPasswordState extends State<RestPassword> {
   TextEditingController _passwordController=TextEditingController();
+  TextEditingController _confirmPasswordController=TextEditingController();
+  TextEditingController _usernameController=TextEditingController();
   void _showConfirmationDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -29,6 +33,7 @@ class _RestPasswordState extends State<RestPassword> {
 
   @override
   Widget build(BuildContext context) {
+    final controller = context.watch<AuthController>();
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -47,22 +52,50 @@ class _RestPasswordState extends State<RestPassword> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               CustomTextFeild(
-                controller: _passwordController,
-                hinttext: "New Password",
-                preICon: Icon(Icons.lock_outline),
-                sufIcon: Icon(Icons.remove_red_eye_outlined),),
-              SizedBox(height: 20,),
+                controller: _usernameController,
+                hinttext: "Email",
+                preICon: Icon(Icons.email_outlined),),
+              SizedBox(height: 20.h,),
               CustomTextFeild(
                 controller: _passwordController,
+                obscureText: !controller.obscureText,
+                hinttext: "New Password",
+                preICon: Icon(Icons.lock_outline),
+                sufIcon: GestureDetector(
+                  onTap: () {
+                    controller.viewPassword();
+                  },
+                  child: Icon(controller.obscureText
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                ),),
+              SizedBox(height: 20.h,),
+              CustomTextFeild(
+                controller: _confirmPasswordController,
                 hinttext: "Confirm Password",
                 preICon: Icon(Icons.lock_outline),
-                sufIcon: Icon(Icons.remove_red_eye_outlined),),
+                obscureText: !controller.confirmText,
+
+                sufIcon: GestureDetector(
+                    onTap: () {
+                      controller.viewConfirmPassword();
+                    },
+                    child: Icon(controller.confirmText
+                        ? Icons.visibility
+                        : Icons.visibility_off),
+              ),),
 
               SizedBox(height: 60.h,),
-              CustomButton(text:"Submit",textStyle: AppStyle.caption1.copyWith(color: AppColor.black) ,
-                functions:(){
-                  _showConfirmationDialog(context);
-              } ,),
+           CustomButton(text:"Submit",textStyle: AppStyle.caption1.copyWith(color: AppColor.black) ,
+                    functions:(){
+                    if(_passwordController.text == _confirmPasswordController.text){
+                      controller.restPassword(password: _passwordController.text, email: _usernameController.text, context: context);
+                    }else{
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(SnackBar(content: Text('Password not Match')));
+                    }
+                  } ,),
+
 
 
             ],

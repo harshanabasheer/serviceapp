@@ -35,57 +35,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       backgroundColor: Colors.white,
-      drawer: Drawer(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/images/profie.jpeg'),
-                  ),
-                   SizedBox(width: 20.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Jacob Jones",
-                          maxLines: 1,
-                          style: AppStyle.bodyBook.copyWith(color: AppColor.black),
-                        ),
-                        Text(
-                          "jacobjones@gmail.com",
-                          maxLines: 1,
-                          style: AppStyle.bodyBook.copyWith(color: AppColor.grey40),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 30.h),
-              buildGestureDetector(Icon(Icons.calendar_today), "Calender"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.payment), "Payment Methods"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.location_on), "Address"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.notifications_none), "Notifications"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.local_offer_sharp), "Offers"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.supervisor_account_rounded), "Refer a Friends"),
-               SizedBox(height: 20.h),
-              buildGestureDetector(Icon(Icons.phone), "Support"),
-            ],
-          ),
-        ),
-      ),
-
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -110,17 +59,9 @@ class _HomePageState extends State<HomePage> {
                   child: Consumer<HomeController>(
                     builder: (context,provider,_) {
                       return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          IconButton(
-                            icon: const Icon(Icons.notes),
-                            onPressed: () {
-                              _scaffoldKey.currentState?.openDrawer();
-                            },
-                          ),
-
-                           SizedBox(width: 70.w),
                           const Icon(Icons.location_on),
                           Consumer<HomeController>(
                             builder: (context,provider,_) {
@@ -133,9 +74,6 @@ class _HomePageState extends State<HomePage> {
                               );
                             }
                           ),
-
-                           SizedBox(width: 70.w),
-                          const Icon(Icons.notifications),
                         ],
                       );
                     }

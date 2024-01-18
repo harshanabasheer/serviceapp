@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:serviceapp/screens/home_page.dart';
 import 'package:serviceapp/screens/profile_page.dart';
+import 'package:serviceapp/services/preference_services.dart';
 import '../controller/bottom_bar_controller.dart';
 import '../utils/constants/app_color.dart';
 import 'all_booking_page.dart';
@@ -10,7 +11,7 @@ class BottomBar extends StatelessWidget {
   List<Widget> pages = [
     HomePage(),
     AllBookings(),
-    ProfilePage(userId: 20,),
+    ProfilePage(),
   ];
 
   @override

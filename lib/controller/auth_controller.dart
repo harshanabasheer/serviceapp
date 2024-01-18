@@ -2,17 +2,18 @@ import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../model/category_model.dart';
 import '../model/login_model.dart';
 import '../model/user_model.dart';
 import '../routes/rout_name.dart';
 import '../services/api_services.dart';
 import '../services/firebase_authentication_service.dart';
+import '../services/preference_services.dart';
 import '../widget/alert.dart';
 
 class AuthController extends ChangeNotifier {
   bool obscureText = true;
+  bool confirmText = true;
   String? validEmail;
   bool loading = false;
   UserModel ? user;
@@ -23,6 +24,11 @@ class AuthController extends ChangeNotifier {
   //password visibility
   void viewPassword() {
     obscureText = !obscureText;
+    notifyListeners();
+  }
+  //confirmed visiblity
+  void viewConfirmPassword() {
+    confirmText = !confirmText;
     notifyListeners();
   }
 
@@ -57,6 +63,7 @@ class AuthController extends ChangeNotifier {
           loading = true;
           notifyListeners();
           await apiService.signIn(email: email, password: password);
+
           Navigator.pushReplacementNamed(context, RoutName.bottomBarPage);
           loading = false;
           notifyListeners();
@@ -114,14 +121,20 @@ class AuthController extends ChangeNotifier {
               Navigator.pushNamed(context, RoutName.otpPage,
                   arguments:verificationId,
               );
+             resendTime = true;
+              notifyListeners();
             },
             codeAutoRetrievalTimeout: (String verificationId) {
+
+              resendTime = false;
+              notifyListeners();
 
             },
             phoneNumber: "+91$phone",
             timeout: Duration(seconds: 30)
           );
           loading = false;
+          resendTime = false;
           notifyListeners();
         }
       } else {
@@ -129,6 +142,7 @@ class AuthController extends ChangeNotifier {
             .showSnackBar(SnackBar(content: Text('All fields are required')));
       }
     } catch (e) {
+      resendTime = false;
       loading = false;
       notifyListeners();
       print(e);
@@ -186,8 +200,14 @@ class AuthController extends ChangeNotifier {
         },
         verificationFailed: (FirebaseAuthException ex) {},
         codeSent: (String verificationId, int? resendToken) {
+          resendTime = true;
+          notifyListeners();
         },
-        codeAutoRetrievalTimeout: (String verificationId) {},
+        codeAutoRetrievalTimeout: (String verificationId) {
+          resendTime = false;
+          notifyListeners();
+
+        },
       );
       resendTime = false;
       notifyListeners();
@@ -206,6 +226,45 @@ class AuthController extends ChangeNotifier {
       }
     }
   }
+
+//reset password
+  void restPassword(
+      {required String password,
+        required String email,
+        required BuildContext context}) async {
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        validEmail = validateEmail(email);
+        if (validEmail != null) {
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text(validEmail!)));
+        } else {
+          loading = true;
+          notifyListeners();
+          await apiService.forgotPassword(email: email, password: password);
+          _showConfirmationDialog(context);
+          loading = false;
+          notifyListeners();
+        }
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('All field are required')));
+      }
+    } catch (e) {
+      loading = false;
+      notifyListeners();
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString(),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
 
 
 

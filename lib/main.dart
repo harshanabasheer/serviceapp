@@ -10,13 +10,15 @@ import 'package:serviceapp/controller/profile_controller.dart';
 import 'package:serviceapp/controller/rout_controller.dart';
 import 'package:serviceapp/routes/rout_name.dart';
 import 'package:serviceapp/routes/routing.dart';
-import 'package:serviceapp/screens/bottombar.dart';
+import 'package:serviceapp/services/preference_services.dart';
 import 'controller/auth_controller.dart';
 import 'controller/bottom_bar_controller.dart';
 
 void main()async{
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await LocalStorage.initialLocalStorage();
+
   runApp(
     MultiProvider(providers: [
       ChangeNotifierProvider(create: (_) => AuthController()),
@@ -36,6 +38,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int ? login= LocalStorage.getLoginId();
     return ScreenUtilInit(
       designSize: Size(414,896),
 
@@ -48,7 +51,7 @@ class MyApp extends StatelessWidget {
           ),
           debugShowCheckedModeBanner: false,
           onGenerateRoute: Routing.generateRoute,
-          initialRoute: RoutName.onBoardingPage,
+          initialRoute:login !=null ? RoutName.bottomBarPage : RoutName.onBoardingPage,
           // home: BottomBar(),
         );
       }

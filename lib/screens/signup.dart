@@ -76,16 +76,7 @@ class _SignUpState extends State<SignUp> {
                 controller: _phoneController,
                 keyboardType: TextInputType.number,
                 hinttext: "Phone Number",
-                obscureText: controller.obscureText,
                 preICon: Icon(Icons.phone),
-                sufIcon: GestureDetector(
-                  onTap: () {
-                    controller.viewPassword();
-                  },
-                  child: Icon(controller.obscureText
-                      ? Icons.visibility
-                      : Icons.visibility_off),
-                ),
               ),
               SizedBox(
                 height: 20,
@@ -123,31 +114,12 @@ class _SignUpState extends State<SignUp> {
                                       email: _usernameController.text,
                                       password: _passwordController.text,
                                       context: context);
+
                       },
                     ),
+
               SizedBox(
-                height: 40.h,
-              ),
-              Align(
-                alignment: Alignment.center,
-                child: Text(
-                  "Sign in with",
-                  style: AppStyle.bodyBook.copyWith(color: AppColor.black),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              GestureDetector(
-                onTap: _handleSignIn,
-                child: Image.asset(
-                  'assets/images/Google.png',
-                  height: 50,
-                  width: 50,
-                ),
-              ),
-              SizedBox(
-                height: 150.h,
+                height: 180.h,
               ),
               Align(
                 alignment: Alignment.bottomCenter,

@@ -1,5 +1,5 @@
 class Apiconstants {
-  static const baseurl = 'https://6637-117-219-144-62.ngrok-free.app';
+  static const baseurl = 'https://a283-117-204-82-76.ngrok-free.app';
   static const login='/api/Login';
   static const userReg='/api/UserReg';
   static const sendOtp='/api/FetchMail';
@@ -12,6 +12,7 @@ class Apiconstants {
   static const getOneRegister='/api/GetOneRegister/';
   static const updateRegister='/api/UpdateRegister/';
   static const searchService ='/api/SearchService';
+  static const forgotPassword ='/api/ForgotPassword';
 
 
 }

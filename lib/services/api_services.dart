@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:serviceapp/services/preference_services.dart';
 import 'package:serviceapp/utils/helper/api_helper.dart';
 import '../model/booking_model.dart';
 import '../model/category_model.dart';
@@ -24,6 +25,8 @@ class ApiService {
       var responseData = jsonDecode(response.body);
 
       var loginModel = LoginModel.fromJson(responseData);
+      LocalStorage.setLoginId(loginModel.data!.loginId!);
+      LocalStorage.setUserId(loginModel.data!.userid!);
       return loginModel;
     } else {
       throw NetWorkError.netWorkError(response: response);
@@ -241,6 +244,23 @@ class ApiService {
       throw NetWorkError.netWorkError(response: response);
     }
   }
+
+  //forgotpassword
+  Future<dynamic> forgotPassword(
+      {required String email, required String password}) async {
+    var response = await _apiHelper.postData(data: {
+      'username': email,
+      'new_password': password,
+    }, apiUrl: Apiconstants.baseurl + Apiconstants.forgotPassword);
+
+    if (response.statusCode == 200) {
+      var responseData = jsonDecode(response.body);
+      return responseData;
+    } else {
+      throw NetWorkError.netWorkError(response: response);
+    }
+  }
+
 
 
 // Future<String> sendOtp({

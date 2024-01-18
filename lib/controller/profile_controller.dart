@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:serviceapp/model/user_model.dart';
+import 'package:serviceapp/services/preference_services.dart';
 import '../services/api_services.dart';
 
 class ProfileController extends ChangeNotifier{
@@ -14,10 +15,11 @@ class ProfileController extends ChangeNotifier{
   File ?imageFile;
 
 
-  Future<void> getOneUserController(BuildContext context, int userId) async {
+  Future<void> getOneUserController(BuildContext context) async {
     try {
       loading = true;
       notifyListeners();
+      int userId = LocalStorage.getUserId();
       oneUser = await apiService.getOneUser(userId);
       loading = false;
       notifyListeners();

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:serviceapp/controller/profile_controller.dart';
+import 'package:serviceapp/services/preference_services.dart';
 import '../routes/rout_name.dart';
 import '../utils/constants/api_constants.dart';
 import '../utils/constants/app_color.dart';
@@ -9,8 +10,8 @@ import '../utils/constants/text_styles.dart';
 import '../widget/button.dart';
 
 class ProfilePage extends StatefulWidget {
-  final int userId;
-  const ProfilePage({super.key, required this.userId});
+
+  const ProfilePage({super.key});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -19,7 +20,7 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   void initState() {
       Provider.of<ProfileController>(context, listen: false)
-          .getOneUserController(context, widget.userId);
+          .getOneUserController(context);
     super.initState();
   }
 
@@ -44,7 +45,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             child: GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, RoutName.updatePage,arguments: 20);
+                Navigator.pushNamed(context, RoutName.updatePage,);
               },
               child: Icon(
                 Icons.edit,
@@ -93,7 +94,10 @@ class _ProfilePageState extends State<ProfilePage> {
                     text: "Log Out",
                     textStyle:
                         AppStyle.caption1.copyWith(color: AppColor.black),
-                    functions: () {},
+                    functions: () {
+                      LocalStorage.clear();
+                      Navigator.pushNamed(context, RoutName.loginPage);
+                    },
                   ),
                 ],
               ),

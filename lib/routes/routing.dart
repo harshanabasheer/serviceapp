@@ -67,9 +67,6 @@ class Routing{
       case RoutName.bottomBarPage:
         return MaterialPageRoute(builder: (_) => BottomBar());
       case RoutName.updatePage:
-        // final args = settings.arguments as Map<String, dynamic> ?? {};
-        // final user = args['user'] as UserModel ?? UserModel();
-         final  userId = settings.arguments as int;
         return MaterialPageRoute(builder: (_) => EditProfilePage());
       case RoutName.searchPage:
         return MaterialPageRoute(builder: (_) => SearchPage());

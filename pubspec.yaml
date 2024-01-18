@@ -23,6 +23,7 @@ dependencies:
   image_picker: ^1.0.4
   geocoding: ^2.1.1
   otp_timer_button: ^1.1.0
+  shared_preferences: ^2.2.2
 
 
 dev_dependencies:

@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:serviceapp/controller/profile_controller.dart';
 
 import '../model/user_model.dart';
+import '../utils/constants/api_constants.dart';
 import '../utils/constants/app_color.dart';
 import '../utils/constants/text_styles.dart';
 import '../widget/button.dart';
@@ -63,7 +64,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               Consumer<ProfileController>(
                 builder: (context,provider,_) {
                   return Container(
-                    child: provider.imageFile == null
+                    child: provider.oneUser?.photo == null
                         ? Row(
                       children: [
                         Container(
@@ -99,7 +100,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       children: [
                         Container(
                           alignment: Alignment.centerLeft,
-                          child: Image.file(
+                          child:provider.imageFile ==null? Image.network(
+                            "${Apiconstants.baseurl}${provider.oneUser?.photo}",) :
+                          Image.file(
                             provider.imageFile!,
                             width: 150,
                             height: 200,
